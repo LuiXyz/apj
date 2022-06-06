@@ -18,6 +18,7 @@ var zrapi = require("zrapi");
 var dotenv = require("dotenv").config()
 var fs = require('fs');
 var TikTokScraper = require('tiktok-scraper');
+var { TiktokDownloader } = require('../lib/tiktokdl.js')
 var { EmojiAPI } = require("emoji-api");
 var emoji = new EmojiAPI();
 var router  = express.Router();
@@ -370,12 +371,75 @@ router.get('/download/tiktok', async (req, res, next) => {
 	if(!Apikey) return res.json(loghandler.notparam)
 	if(listkey.includes(Apikey)){
      if (!url) return res.json(loghandler.noturl)
-     Tiktok(url)
-     .then((data) => {
-       res.json(data)
-     })
-    } else {
-res.json(loghandler.invalidKey)
+     TiktokDownloader(`${url}`)
+        .then(data => {
+        var result = data.result;
+             res.json({
+               status: true,
+               code: 200,
+               creator: `${creator}`,
+               result
+             })
+         })
+         .catch((error) => {
+            res.json(error);
+        });
+      } else {
+     res.json(loghandler.invalidKey)
+     }
+});
+
+router.get('/download/tiktok3', async(req, res, next) => {
+  const apikey = req.query.apikey;
+  const url = req.query.url;
+  
+  if(!url) return res.json(loghandler.noturl)
+  if(!apikey) return res.json(loghandler.notparam)
+  
+  if(listkey.includes(apikey)){
+    fetch(encodeURI(`https://tiktokd.herokuapp.com/tiktok?url=${url}`))
+    .then(response => response.json())
+        .then(hasil => {
+
+        var result = hasil.link;
+             res.json({
+                 status : true,
+                 creator : `${creator}`,
+                 result
+             })
+         })
+         .catch(e => {
+         	res.json(loghandler.error)
+})
+} else {
+  res.json(loghandler.invalidKey)
+}
+})
+
+router.get('/download/tiktok2', async(req, res, next) => {
+  const apikey = req.query.apikey;
+  const url = req.query.url;
+  
+  if(!url) return res.json(loghandler.noturl)
+  if(!apikey) return res.json(loghandler.notparam)
+  
+  if(listkey.includes(apikey)){
+    fetch(encodeURI(`https://aqulzz.herokuapp.com/tiktok?url=${url}`))
+    .then(response => response.json())
+        .then(hasil => {
+
+        var result = hasil.result;
+             res.json({
+                 status : true,
+                 creator : `${creator}`,
+                 result
+             })
+         })
+         .catch(e => {
+         	res.json(loghandler.error)
+})
+} else {
+  res.json(loghandler.invalidKey)
 }
 })
 
@@ -2480,6 +2544,87 @@ router.get('/web2plain-text', async(req, res, next) => {
     res.json(loghandler.invalidKey)
   }
 });
+
+router.get('/downloader/xvideo', async(req, res, next) => {
+  const apikey = req.query.apikey;
+  const query = req.query.query;
+  
+  if(!query) return res.json(loghandler.notquery)
+  if(!apikey) return res.json(loghandler.notparam)
+  
+  if(listkey.includes(apikey)){
+    fetch(encodeURI(`http://kocakz.herokuapp.com/api/media/xvideo/search?query=${query}`))
+    .then(response => response.json())
+        .then(hasil => {
+
+        var result = hasil.result;
+             res.json({
+                 status : true,
+                 creator : `${creator}`,
+                 result
+             })
+         })
+         .catch(e => {
+         	res.json(loghandler.error)
+})
+} else {
+  res.json(loghandler.invalidKey)
+}
+})
+
+router.get('/downloader/pornhub', async(req, res, next) => {
+  const apikey = req.query.apikey;
+  const query = req.query.query;
+  
+  if(!query) return res.json(loghandler.notquery)
+  if(!apikey) return res.json(loghandler.notparam)
+  
+  if(listkey.includes(apikey)){
+    fetch(encodeURI(`http://kocakz.herokuapp.com/api/media/pornhub/search?query=${query}`))
+    .then(response => response.json())
+        .then(hasil => {
+
+        var result = hasil.res;
+             res.json({
+                 status : true,
+                 creator : `${creator}`,
+                 result
+             })
+         })
+         .catch(e => {
+         	res.json(loghandler.error)
+})
+} else {
+  res.json(loghandler.invalidKey)
+}
+})
+
+router.get('/downloader/xnxx', async(req, res, next) => {
+  const apikey = req.query.apikey;
+  const query = req.query.query;
+  
+  if(!query) return res.json(loghandler.notquery)
+  if(!apikey) return res.json(loghandler.notparam)
+  
+  if(listkey.includes(apikey)){
+    fetch(encodeURI(`http://kocakz.herokuapp.com/api/media/xnxx/search?query=${query}`))
+    .then(response => response.json())
+        .then(hasil => {
+
+        var result = hasil.result;
+             res.json({
+                 status : true,
+                 creator : `${creator}`,
+                 result
+             })
+         })
+         .catch(e => {
+         	res.json(loghandler.error)
+})
+} else {
+  res.json(loghandler.invalidKey)
+}
+})
 
 router.get('/nsfw/ahegao', async (req, res, next) => {
         var Apikey = req.query.apikey
