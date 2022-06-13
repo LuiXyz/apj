@@ -14,6 +14,6 @@ RUN npm install && git clone https://github.com/LuiXyz/Termux-Bot-md && cd Termu
 
 COPY . .
 
-EXPOSE 5000
+EXPOSE 8080
 
 CMD ["node", "index.js"]
