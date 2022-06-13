@@ -10,7 +10,7 @@ RUN apt-get update && \
 
 COPY package.json .
 
-RUN npm install && git clone https://github.com/LuiXyz/Termux-Bot-md && cd Termux-Bot-md && npm install && npm install pm2 && pm2 start index.js && pm2 save 
+RUN npm install 
 
 COPY . .
 
