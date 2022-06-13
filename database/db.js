@@ -3,9 +3,9 @@ var __path = process.cwd(),
      { color } = require(__path + '/lib/color.js')
 
 // Connection URL
-var url = 'https://apiasu.herokuapp.com';
+var url = 'https://web-luixyz.cloud.okteto.net/';
 try {
-if(url == 'https://apiasu.herokuapp.com') throw console.log(color('Cek konfigurasi database, var url belum diisi','red'));
+if(url == 'https://web-luixyz.cloud.okteto.net/') throw console.log(color('Cek konfigurasi database, var url belum diisi','red'));
 } catch (e) {
 	return;
 	}
