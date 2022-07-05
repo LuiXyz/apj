@@ -389,60 +389,6 @@ router.get('/download/tiktok', async (req, res, next) => {
      }
 });
 
-router.get('/download/tiktok3', async(req, res, next) => {
-  const apikey = req.query.apikey;
-  const url = req.query.url;
-  
-  if(!url) return res.json(loghandler.noturl)
-  if(!apikey) return res.json(loghandler.notparam)
-  
-  if(listkey.includes(apikey)){
-    fetch(encodeURI(`https://tiktokd.herokuapp.com/tiktok?url=${url}`))
-    .then(response => response.json())
-        .then(hasil => {
-
-        var result = hasil.link;
-             res.json({
-                 status : true,
-                 creator : `${creator}`,
-                 result
-             })
-         })
-         .catch(e => {
-         	res.json(loghandler.error)
-})
-} else {
-  res.json(loghandler.invalidKey)
-}
-})
-
-router.get('/download/tiktok2', async(req, res, next) => {
-  const apikey = req.query.apikey;
-  const url = req.query.url;
-  
-  if(!url) return res.json(loghandler.noturl)
-  if(!apikey) return res.json(loghandler.notparam)
-  
-  if(listkey.includes(apikey)){
-    fetch(encodeURI(`https://aqulzz.herokuapp.com/tiktok?url=${url}`))
-    .then(response => response.json())
-        .then(hasil => {
-
-        var result = hasil.result;
-             res.json({
-                 status : true,
-                 creator : `${creator}`,
-                 result
-             })
-         })
-         .catch(e => {
-         	res.json(loghandler.error)
-})
-} else {
-  res.json(loghandler.invalidKey)
-}
-})
-
 router.get('/download/ig', async(req, res, next) => {
   const url = req.query.url;
   const apikey = req.query.apikey;
@@ -601,7 +547,7 @@ res.json(loghandler.invalidKey)
 })
 
 
-router.get('/jadwal-bioskop', async(req, res, next) => {
+router.get('/info/jadwal-bioskop', async(req, res, next) => {
 var Apikey = req.query.apikey
 
 if(!Apikey) return res.json(loghandler.notparam)
@@ -638,6 +584,40 @@ Axios.get('https://jadwalnonton.com/now-playing')
      result: result
      })
 })
+} else {
+res.json(loghandler.invalidKey)
+}
+})
+
+router.get('/info/jadwal-bola', async(req, res, next) => {
+var Apikey = req.query.apikey
+
+if(!Apikey) return res.json(loghandler.notparam)
+if(listkey.includes(Apikey)){
+const { default: Axios } = require('axios')
+const cheerio = require('cheerio')
+  
+        Axios.get('https://m.bola.net/jadwal_televisi/')
+            .then(({
+                data
+            }) => {
+                const $ = cheerio.load(data)
+                const hasil = [];
+                $('body > div.main > div > div:nth-child(3) > div > ul > li').each(function(a, b) {
+                    result = {
+                    status: true,
+                    author: author,
+                    jadwal: $(b).find('> div > div > p > a').text().split('Jadwal TV: ')[1],
+                    tanggal: $(b).find('> div > div > span').text().split('jadwal televisi ')[1],
+                    url: $(b).find('> div > div > p > a').attr('href'),
+                    thumb: 'https://cdns.klimg.com/bola.net/library/upload/21/2019/01/100s/bola_e9af938.jpg'
+                }
+                hasil.push(result)
+                })
+                resolve(hasil)
+            })
+            .catch(reject)
+    })
 } else {
 res.json(loghandler.invalidKey)
 }
